@@ -31,9 +31,8 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let screen = VirtualScreen::new(pix_cfg.window_width/pix_cfg.scaling_factor, pix_cfg.window_height/pix_cfg.scaling_factor);
+    let screen = VirtualScreen::new(pix_cfg.window_width, pix_cfg.window_height);
     screen.apply_camera();
-
     loop {
         clear_background(LIGHTGRAY);
 
