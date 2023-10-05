@@ -32,11 +32,16 @@ fn window_conf() -> Conf {
 #[macroquad::main(window_conf)]
 async fn main() {
     let screen = VirtualScreen::new(pix_cfg.window_width, pix_cfg.window_height);
-    screen.apply_camera();
     loop {
-        clear_background(LIGHTGRAY);
+        clear_background(BLACK);
 
+        screen.apply_camera();
+
+        draw_rectangle(0., 0., pix_cfg.window_width, pix_cfg.window_height, LIGHTGRAY);
+        
         draw_rectangle(128., 96., 50., 50., GREEN);
+
+        set_default_camera();
 
         next_frame().await
     }

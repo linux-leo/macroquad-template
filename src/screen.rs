@@ -3,36 +3,33 @@ use macroquad::prelude::*;
 pub struct VirtualScreen {
     virtual_width: f32,
     virtual_height: f32,
-    scale: Vec2,
-    offset: Vec2,
 }
 
 impl VirtualScreen {
     pub fn new(virtual_width: f32, virtual_height: f32) -> Self {
-        let scale = vec2(screen_width() / virtual_width, screen_height() / virtual_height);
-        
-        fn calculate_offset(screen: f32, length: f32, scale: f32) -> f32 {
-            (screen - length * scale) / 2.0
-        }
-
-        let offset = vec2(
-            calculate_offset(screen_width(), virtual_width, scale.x),
-            calculate_offset(screen_height(), virtual_height, scale.y)
-        );
-
         VirtualScreen {
             virtual_width,
             virtual_height,
-            scale,
-            offset,
         }
     }
 
     pub fn apply_camera(&self) {
+        let screen_aspect = screen_width() / screen_height();
+        let virtual_aspect = self.virtual_width / self.virtual_height;
+
+        let (scale_x, scale_y) = if screen_aspect > virtual_aspect {
+            // The screen is wider than the desired aspect ratio
+            let scale = screen_height() / self.virtual_height;
+            (scale, scale)
+        } else {
+            // The screen is taller or equal to the desired aspect ratio
+            let scale = screen_width() / self.virtual_width;
+            (scale, scale)
+        };
+
         set_camera(&Camera2D {
             target: vec2(self.virtual_width / 2.0, self.virtual_height / 2.0),
-            zoom: vec2(1.0 / self.scale.x, 1.0 / self.scale.y),
-            offset: self.offset,
+            zoom: vec2(1.0 / scale_x, 1.0 / scale_y),
             ..Default::default()
         });
     }
