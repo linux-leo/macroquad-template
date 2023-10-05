@@ -3,20 +3,35 @@ mod screen;
 use macroquad::prelude::*;
 use crate::screen::VirtualScreen;
 
+struct PixCfg<'a> {
+    window_title: &'a str,
+    window_width: f32,
+    window_height: f32,
+    scaling_factor: f32,
+    fullscreen: bool,
+}
+
+const pix_cfg: PixCfg = PixCfg {
+    window_title: "hi",
+    window_width: 256.0,
+    window_height: 192.0,
+    scaling_factor: 4.0,
+    fullscreen: false,
+};
+
 fn window_conf() -> Conf {
-    let config = Conf {
-        window_title: "Test".to_owned(),
-        window_width: 256,
-        window_height: 192,
-        fullscreen: true,
+    Conf  {
+        window_title: pix_cfg.window_title.to_string(),
+        window_width: (pix_cfg.window_width*pix_cfg.scaling_factor) as i32,
+        window_height: (pix_cfg.window_height*pix_cfg.scaling_factor) as i32,
+        fullscreen: pix_cfg.fullscreen,
         ..Default::default()
     }
 }
 
 #[macroquad::main(window_conf)]
 async fn main() {
-
-    let screen = VirtualScreen::new(config.window_width, config.window_height);
+    let screen = VirtualScreen::new(pix_cfg.window_width/pix_cfg.scaling_factor, pix_cfg.window_height/pix_cfg.scaling_factor);
     screen.apply_camera();
 
     loop {
