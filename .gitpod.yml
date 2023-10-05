@@ -1,0 +1,6 @@
+image: gitpod/workspace-full-vnc
+
+# Ports to expose on workspace startup
+ports:
+    - port: 6080
+      protocol: http
